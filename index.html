@@ -12,6 +12,9 @@ body{
     font-family: 'Georgia', serif;
     overflow:hidden;
     color:#fff;
+    display:flex;
+    justify-content:center;
+    align-items:center;
 }
 
 /* Floating hearts */
@@ -94,7 +97,7 @@ button{
     <div class="bears">🐻🧥💞🐻🎀</div>
     <h1>Do you love me?</h1>
     <div class="buttons">
-        <button class="next" onclick="go(1)">Yes</button>
+        <button class="next" id="firstYes">Yes</button>
         <button class="quit">No</button>
     </div>
 </div>
@@ -109,7 +112,7 @@ button{
         this is something deeper.
     </p>
     <div class="buttons">
-        <button class="next" onclick="go(2)">Next</button>
+        <button class="next" data-next="2">Next Page</button>
         <button class="quit">Quit</button>
     </div>
 </div>
@@ -124,7 +127,7 @@ button{
         and my heart slows down.
     </p>
     <div class="buttons">
-        <button class="next" onclick="go(3)">Next</button>
+        <button class="next" data-next="3">Next Page</button>
         <button class="quit">Quit</button>
     </div>
 </div>
@@ -139,7 +142,7 @@ button{
         even when I say nothing.
     </p>
     <div class="buttons">
-        <button class="next" onclick="go(4)">Next</button>
+        <button class="next" data-next="4">Next Page</button>
         <button class="quit">Quit</button>
     </div>
 </div>
@@ -154,7 +157,7 @@ button{
         on my weakest days.
     </p>
     <div class="buttons">
-        <button class="next" onclick="go(5)">Next</button>
+        <button class="next" data-next="5">Next Page</button>
         <button class="quit">Quit</button>
     </div>
 </div>
@@ -168,7 +171,7 @@ button{
         are enough to fix me.
     </p>
     <div class="buttons">
-        <button class="next" onclick="go(6)">Next</button>
+        <button class="next" data-next="6">Next Page</button>
         <button class="quit">Quit</button>
     </div>
 </div>
@@ -182,7 +185,7 @@ button{
         makes everything lighter.
     </p>
     <div class="buttons">
-        <button class="next" onclick="go(7)">Next</button>
+        <button class="next" data-next="7">Next Page</button>
         <button class="quit">Quit</button>
     </div>
 </div>
@@ -197,7 +200,7 @@ button{
         and still be enough.
     </p>
     <div class="buttons">
-        <button class="next" onclick="go(8)">Next</button>
+        <button class="next" data-next="8">Next Page</button>
         <button class="quit">Quit</button>
     </div>
 </div>
@@ -212,7 +215,7 @@ button{
         every emotion.
     </p>
     <div class="buttons">
-        <button class="next" onclick="go(9)">Next</button>
+        <button class="next" data-next="9">Next Page</button>
         <button class="quit">Quit</button>
     </div>
 </div>
@@ -236,33 +239,51 @@ button{
 </div>
 
 <script>
-let pages=document.querySelectorAll(".page");
-let quits=document.querySelectorAll(".quit");
+let pages = document.querySelectorAll(".page");
+let quits = document.querySelectorAll(".quit");
+let nextButtons = document.querySelectorAll(".next");
+let currentPage = 0;
 
-function go(n){
-    pages.forEach(p=>p.classList.remove("active"));
-    pages[n].classList.add("active");
-}
+// First Yes button
+document.getElementById("firstYes").addEventListener("click", ()=>{
+    pages[currentPage].classList.remove("active");
+    currentPage = 1;
+    pages[currentPage].classList.add("active");
+});
 
-quits.forEach(b=>{
-    b.addEventListener("mouseover",move);
-    b.addEventListener("click",move);
+// Other Next buttons
+nextButtons.forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+        let nextIndex = parseInt(btn.getAttribute("data-next"));
+        if(!isNaN(nextIndex) && nextIndex < pages.length){
+            pages[currentPage].classList.remove("active");
+            currentPage = nextIndex;
+            pages[currentPage].classList.add("active");
+        }
+    });
+});
+
+// Quit buttons move away
+quits.forEach(btn=>{
+    btn.addEventListener("mouseover", move);
+    btn.addEventListener("click", move);
 });
 
 function move(e){
-    e.target.style.left=Math.random()*(window.innerWidth-200)+"px";
-    e.target.style.top=Math.random()*(window.innerHeight-100)+"px";
+    e.target.style.left = Math.random()*(window.innerWidth-200)+"px";
+    e.target.style.top = Math.random()*(window.innerHeight-100)+"px";
 }
 
-// Hearts
+// Floating hearts
 setInterval(()=>{
-    let h=document.createElement("div");
+    let h = document.createElement("div");
     h.className="heart";
     h.innerHTML="❤️";
     h.style.left=Math.random()*100+"vw";
     document.body.appendChild(h);
     setTimeout(()=>h.remove(),8000);
 },300);
+
 </script>
 
 </body>
